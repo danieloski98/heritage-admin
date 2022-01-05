@@ -12,7 +12,7 @@ export default function Index() {
            </div>
            <div className="flex-1 flex flex-col">
                <Navbar />
-               <div className="flex-1 bg-gray-200 p-10 overflow-y-auto pb-12">
+               <div className="flex-1 bg-gray-200 pt-10 pl-10 pr-10 pb-6 overflow-y-auto">
                    <Outlet />
                </div>
            </div>

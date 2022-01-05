@@ -11,6 +11,8 @@ import Index from '../Features/dashboard/Pages/Dashboard';
 import Users from '../Features/dashboard/Pages/Users';
 import Pending from '../Features/dashboard/Pages/Pending';
 import Transactions from '../Features/dashboard/Pages/Transactions';
+import User from '../Features/dashboard/Pages/User'
+import Profile from '../Features/dashboard/Pages/Profile'
 
 export default function AuthenticationRoutes() {
     return (
@@ -21,9 +23,11 @@ export default function AuthenticationRoutes() {
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/dashboard" element={<Dashboard />} >
                 <Route path="" element={<Index />}  />
-                <Route path="Users" element={<Users />}  />
+                <Route path="users" element={<Users />}  />
+                <Route path="users/:id" element={<User />} />
                 <Route path="Pending" element={<Pending />}  />
                 <Route path="transactions" element={<Transactions />}  />
+                <Route path="profile" element={<Profile />}  />
             </Route>
         </Routes>
     )

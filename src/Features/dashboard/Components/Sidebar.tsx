@@ -2,11 +2,16 @@ import React from 'react'
 import { FiAlignLeft, FiGrid } from 'react-icons/fi'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
+import { Badge } from '@chakra-ui/react'
+import PaypointModal from './PaypointModal';
 
 export default function Sidebar() {
-    const router = useNavigate();
+    const [showModal, setShowModal] = React.useState(false);
     return (
         <div className='flex flex-col w-full h-full'>
+
+            {/* modals */}
+            <PaypointModal open={showModal} close={setShowModal} />
 
             <div className="w-full h-24 flex items-center px-5">
                 <FiAlignLeft color="white" size={30} />
@@ -28,7 +33,12 @@ export default function Sidebar() {
                 </Link>
                 
                 <Link to="/dashboard/pending">
-                    <p className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Pending Transactions</p>
+                    <div className="flex">
+                        <p className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Pending Transactions</p>
+                        <Badge colorScheme="blue" className='h-5 ml-2'>
+                            0
+                        </Badge>
+                    </div>
                 </Link>
 
                 <Link to="/dashboard/transactions">
@@ -36,7 +46,7 @@ export default function Sidebar() {
                 </Link>
 
                 <p className="text-md font-Inter_Bold text-gray-200 mt-6 mb-8">PAYPOINTS / RATE</p>
-                <p className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>User Management</p>
+                <p onClick={() => setShowModal(true)} className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Manage Paypoints</p>
             </div>
 
             <div className="w-full h-24 flex items-center justify-center cursor-pointer">

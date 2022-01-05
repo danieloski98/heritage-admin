@@ -112,7 +112,7 @@ export default function Dashboard() {
                         <p className='text-sm text-gray-600 font-Inter_Regular'>Here’s a summary of total transactions on Heritage Exchange</p>
                     </div>
                     <div className="flex-1 h-26 flex justify-end items-center">
-                        <div className="w-72 rounded-full bg-white h-10 flex justify-between px-3 items-center">
+                        {/* <div className="w-72 rounded-full bg-white h-10 flex justify-between px-3 items-center">
                             <div className="flex-1 h-8 flex items-center justify-center rounded-md text-white bg-black">
                                 1D
                             </div>
@@ -128,7 +128,7 @@ export default function Dashboard() {
                             <div className="flex-1 h-8 flex items-center justify-center rounded-md text-black">
                                 1Y
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
