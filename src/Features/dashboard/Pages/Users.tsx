@@ -3,20 +3,73 @@ import { InputGroup, InputLeftElement, Input, Spinner, Select } from '@chakra-ui
 import { FiSearch, FiEdit, FiTrash, FiEye } from 'react-icons/fi'
 import EditModal from '../Components/users/EditModal';
 import DeleteModal from '../Components/users/DeleteModal';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { url } from '../../../utils/url';
+import { IServerReturnType } from '../../../utils/types/ServerReturnType';
+import { useQuery } from 'react-query';
+import { useRecoilState } from 'recoil';
+import useTitle from '../../../hooks/useTitle'
+
+// recoil state
+import {TokenState} from '../../../state/token'
+import { IUser } from '../../../utils/types/IUser';
+
+const getUsers = async (token: string) => {
+    const request = await fetch(`${url}user`, {
+        method: 'GET',
+        headers: {
+            authorization: `Bearer ${token}`,
+        },
+    });
+    const json = await request.json() as IServerReturnType;
+    if (!request.ok) {
+        throw new Error('An occured');
+    }
+    return json;
+}
 
 const arr = [1,2,1,2,3,2,3,455,4,3,2,3,4,5,34];
 
 export default function Users() {
     const [openEditModal, setOpenEditModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
+    const [error, setError] = React.useState(false);
+    const [activeUser, setActiveUser] = React.useState({} as IUser);
+    const [users, setUsers] = React.useState([] as Array<IUser>)
+    const [token, setToken] = useRecoilState(TokenState);
+    const {setTitle} = useTitle();
+
+
+    // getuser query
+    const getUser = useQuery(['getUsers', token], () => getUsers(token), {
+        onSuccess: (data) => {
+
+            setUsers(data.data);
+            setLoading(false);
+        },
+        onError: () => {
+            setLoading(false);
+            setError(true);
+        }
+    });
+
+    React.useEffect(() => {
+        setTitle('User Management');
+    });
+
+    const handleEditModal = (user: IUser) => {
+        setActiveUser(user);
+        setOpenDeleteModal(true)
+
+    }
 
     return (
         <div className='w-full h-full flex flex-col'>
 
             {/* modals */}
 
-            <EditModal open={openEditModal} close={setOpenEditModal} />
+            <EditModal user={activeUser} open={openEditModal} close={setOpenEditModal} />
             <DeleteModal open={openDeleteModal} close={setOpenDeleteModal} />
 
             <div className="flex h-12 items-center">
@@ -55,18 +108,18 @@ export default function Users() {
 
             <div className="flex-1 bg-white mt-6 rounded-md overflow-y-auto pt-10">
                 {
-                    arr.map((item, index) => (
-                        <div key={index.toString()} className="grid grid-cols-6 gap-1 mt-0 text-center mb-10">
-                                <p className='font-Inter_Regular text-sm text-gray-700'>{index+1}</p>
-                                <p className='font-Inter_Regular text-sm text-gray-700'>Daniel Emmanuel</p>
-                                <p className='font-Inter_Regular text-sm text-gray-700'>Daniel@gmail.com</p>
-                                <p className='font-Inter_Regular text-sm text-gray-700'>08033634507</p>
-                                <p className='font-Inter_Regular text-sm text-gray-700'>{new Date().toDateString()}</p>
+                    users.map((item, index) => (
+                        <div key={index.toString()} className="flex mt-0 text-center mb-10">
+                                <p className='font-Inter_Regular text-sm text-gray-700 flex-1'>{index+1}</p>
+                                <p className='font-Inter_Regular text-sm text-gray-700 flex-1'>{item.first_name} {item.last_name}</p>
+                                <p className='font-Inter_Regular text-sm text-gray-700 flex-1'>{item.email}</p>
+                                <p className='font-Inter_Regular text-sm text-gray-700 flex-1'>{item.phone}</p>
+                                <p className='font-Inter_Regular text-sm text-gray-700 flex-1'>{new Date(item.createdAt).toDateString()}</p>
 
-                                <div className="flex w-full justify-center items-center">
-                                    <FiTrash size={20} color="black" className='mr-5 cursor-pointer' onClick={() => setOpenDeleteModal(true)} />
+                                <div className="flex w-full justify-center items-center flex-1">
+                                    <FiTrash size={20} color="black" className='mr-5 cursor-pointer' onClick={() => handleEditModal(item) } />
                                     <FiEdit size={20} color="black" className='mr-5 cursor-pointer' onClick={() => setOpenEditModal(true)} />
-                                    <Link to="/dashboard/users/23">
+                                    <Link to={`/dashboard/users/${item._id}`}>
                                         <FiEye size={20} color="black" className='mr-0 cursor-pointer' />
                                     </Link>
                                 </div>

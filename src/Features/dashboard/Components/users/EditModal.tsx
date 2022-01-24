@@ -1,12 +1,14 @@
 import React from 'react'
 import { Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton, Select, Input } from '@chakra-ui/react'
+import { IUser } from '../../../../utils/types/IUser'
 
 interface IProps {
     open: boolean;
-    close: Function
+    close: Function;
+    user?: IUser;
 }
 
-export default function EditModal({ open, close}: IProps) {
+export default function EditModal({ open, close, user}: IProps) {
     return (
         <Modal isOpen={open} onClose={() => close(false)} isCentered closeOnEsc closeOnOverlayClick={false} size="md">
             <ModalOverlay />
@@ -24,26 +26,26 @@ export default function EditModal({ open, close}: IProps) {
 
                         <div className="flex-1 flex flex-col">
                             <p className="text-sm text-gray-600 font-Inter_Regular">First name</p>
-                            <Input bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
+                            <Input value={user?.first_name} bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
                         </div>
                     </div>
 
                     <div className="mt-4 flex">
                         <div className="flex-1 flex flex-col pr-4">
                             <p className="text-sm text-gray-600 font-Inter_Regular">Last name</p>
-                            <Input bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
+                            <Input value={user?.last_name} bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
                         </div>
 
                         <div className="flex-1 flex flex-col">
                             <p className="text-sm text-gray-600 font-Inter_Regular">Phone number</p>
-                            <Input bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
+                            <Input value={user?.phone} bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
                         </div>
                     </div>
 
                     <div className="mt-4 flex">
                         <div className="flex-1 flex flex-col pr-4">
                             <p className="text-sm text-gray-600 font-Inter_Regular">Email</p>
-                            <Input bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
+                            <Input value={user?.email} bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
                         </div>
 
                         <div className="flex-1 flex flex-col">

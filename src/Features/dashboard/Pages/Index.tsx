@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
-import { Routes, Route, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 
 
 export default function Index() {
