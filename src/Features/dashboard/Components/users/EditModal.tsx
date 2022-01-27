@@ -30,6 +30,7 @@ export default function EditModal({ open, close, user}: IProps) {
             last_name: user?.last_name
         },
         onSubmit: () => {},
+        enableReinitialize: true,
     });
 
     const submit = async () => {

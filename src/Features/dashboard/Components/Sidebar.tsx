@@ -4,9 +4,13 @@ import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import { Badge } from '@chakra-ui/react'
 import PaypointModal from './PaypointModal';
+import {useRecoilState} from 'recoil'
+
+import {PendingState} from '../../../state/pending'
 
 export default function Sidebar() {
     const [showModal, setShowModal] = React.useState(false);
+    const [pending, setPending] = useRecoilState(PendingState);
     return (
         <div className='flex flex-col w-full h-full'>
 
@@ -36,7 +40,7 @@ export default function Sidebar() {
                     <div className="flex">
                         <p className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Pending Transactions</p>
                         <Badge colorScheme="blue" className='h-5 ml-2'>
-                            0
+                            {pending}
                         </Badge>
                     </div>
                 </Link>

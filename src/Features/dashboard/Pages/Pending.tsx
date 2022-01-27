@@ -1,10 +1,34 @@
 import React from 'react'
-import { InputGroup, InputLeftElement, Input, Spinner, Select } from '@chakra-ui/react'
+import { InputGroup, InputLeftElement, Input, Select } from '@chakra-ui/react'
 import { FiSearch } from 'react-icons/fi'
-import { Link } from 'react-router-dom'
 import TransactionModal from '../Components/TransactionModal';
+import { useQuery } from 'react-query'
 
-const arr = [1,2,1,2,3,2,3,455,4,3,2,3,4,5,34];
+
+// context
+import {useRecoilState} from 'recoil'
+import {TokenState} from '../../../state/token';
+import { ITransaction } from '../../../utils/types/Transaction';
+import { url } from '../../../utils/url';
+import { IServerReturnType } from '../../../utils/types/ServerReturnType';
+import PendingBuy from '../Components/PendingBuy';
+import PendingSell from '../Components/PendingSell';
+
+// get transactions
+const getTransactions = async (token: string) => {
+    const request = await fetch(`${url}transaction?pending=${true}`, {
+        method: 'get',
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    });
+    const json = await request.json() as IServerReturnType;
+    if (!request.ok) {
+        throw new Error('An error occured while fetching transactions');
+    }
+    return json;
+}
+
 
 const ACTIVE = 'flex-1 border-b-2 border-btnBlue flex items-center justify-center font-Inter_Medium text-sm cursor-pointer text-btnBlue';
 const INACTIVE = 'flex-1  flex items-center justify-center font-Inter_Medium text-sm cursor-pointer text-gray-400';
@@ -12,11 +36,68 @@ const INACTIVE = 'flex-1  flex items-center justify-center font-Inter_Medium tex
 export default function PendingTransactions() {
     const [tab, setTab] = React.useState(1);
     const [openModal, setOpenModal] = React.useState(false);
+    const [buy, setBuy] = React.useState([] as Array<ITransaction>);
+    const [sell, setSell] = React.useState([] as Array<ITransaction>);
+    const [search, setSearch] = React.useState('');
+    const [sort, setSort] = React.useState('');
+    const [transLoading, setTransloading] = React.useState(true);
+    const [transError, setTranserror] = React.useState(false);
+    const [activeTrans, setActiveTrans] = React.useState({} as ITransaction);
+    // const [pending, setPending] = useRecoilState(PendingState)
+
+    // conntext
+    const [token, _] = useRecoilState(TokenState);
+
+    // query
+    const transactionsQuery = useQuery(['getPending', token], () => getTransactions(token), {
+        onSuccess: (data) => {
+            const buyT = (data.data as ITransaction[]).filter((item, index) => item.type === 1);
+            const sellT = (data.data as ITransaction[]).filter((item, index) => item.type === 2);
+            setBuy(buyT);
+            setSell(sellT);
+            console.log(sellT);
+            setTransloading(false);
+            setTranserror(false);
+            // setPending(buyT.length + sellT.length);
+        },
+        onError: (error) => {
+            setTranserror(true);
+            setTransloading(false);
+        }
+    })
+
+    const tabswitcher = () => {
+        switch(tab) {
+            case 1: {
+                return <div className="ww-full h-full flex flex-col items-center justify-center">
+                    <img src="/images/nosearch.jpg" className='w-72 h-56' alt="empty"/>
+                    Nothing found
+                </div>
+            }
+            case 2: {
+                return <div className="w-full h-full flex flex-col items-center justify-center ">
+                    <img src="/images/nosearch.jpg" className='w-72 h-56' alt="empty"/>
+                    Nothing found
+                </div>
+            }
+            case 3: {
+                return <PendingBuy transactions={buy} setOpenModal={openTransactionModal} />
+            }
+            case 4: {
+                return <PendingSell transactions={sell} setOpenModal={openTransactionModal} />
+            }
+        }
+    }
+
+    const openTransactionModal = (item: ITransaction) => {
+        setActiveTrans(item);
+        setOpenModal(true);
+    }
 
     return (
         <div className='w-full h-full flex flex-col'>
 
-            <TransactionModal open={openModal} close={setOpenModal} />
+            <TransactionModal open={openModal} close={setOpenModal} transaction={activeTrans} />
             
             {/* Header */}
 
@@ -33,12 +114,12 @@ export default function PendingTransactions() {
 
                 <div className="w-96  flex items-center">
                     <p className='font-Inter_Regular text-sm'>Filter</p>
-                    <div className="w-56 mx-4">
+                    <div className="w-full ml-4">
                         <Select bgColor="white" fontSize="sm" className="font-Inter_Regular">
-                            <option>Give me options</option>
+                            <option>Firstname</option>
                         </Select>
                     </div>
-                    <button className='w-24 h-10 bg-btnBlue text-white font-Inter_Regular rounded-md'>Apply</button>
+                    {/* <button className='w-24 h-10 bg-btnBlue text-white font-Inter_Regular rounded-md'>Apply</button> */}
                 </div>
 
             </div>
@@ -96,41 +177,7 @@ export default function PendingTransactions() {
 
                 {/* main body */}
 
-                <div className="flex-1 p-6 flex flex-col overflow-auto">
-                  {
-                      arr.map((item, index) => (
-                        <div key={index.toString()} className="flex mb-8">
-                            <div className="flex-1 flex items-center justify-center font-Inter_Medium text-sm text-gray-600">
-                                <p className='text-xs text-gray-600 font-Inter_Regular'>Johnson Nnamdi</p>
-                            </div>
-    
-                            <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600">
-                                <p className='text-xs text-gray-600 font-Inter_Regular'>#5278399292922</p>
-                            </div>
-    
-                            <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600">
-                                <p className='text-xs text-gray-600 font-Inter_Regular'>ZENITH- 0238393833</p>
-                            </div>
-    
-                            <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600">
-                                <p className='text-xs text-gray-600 font-Inter_Regular'>USDT WALLET (SAVINGS)</p>
-                            </div>
-    
-                            <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600">
-                                <p className='text-xs text-gray-600 font-Inter_Regular'>$300</p>
-                            </div>
-    
-                            <div className="flex-1  flex flex-col items-center justify-center font-Inter_Medium text-smtext-gray-600">
-                                <div className="w-32 h-8 flex items-center justify-center border-2 border-gray-600 text-xs font-Inter_Medium rounded-full">
-                                    <div className="w-2 h-2 rounded-full bg-yellow-400 mr-4"></div>
-                                    <span>Processing</span>
-                                </div>
-                                <p onClick={() => setOpenModal(true)} className="underline text-xs mt-2 cursor-pointer">Review</p>
-                            </div>
-                       </div>
-                      ))
-                  }
-                </div>
+               {tabswitcher()}
 
             </div>
 
