@@ -1,5 +1,6 @@
 
 export interface IAdmin {
+  _id?: string;
   email?: string;
   fullname?: string;
   phone?: string;

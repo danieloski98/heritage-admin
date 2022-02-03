@@ -1,16 +1,62 @@
 import React from 'react'
-import { FiChevronLeft, FiArrowLeftCircle, FiMoreVertical } from 'react-icons/fi'
-import { Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
-import { useNavigate, Navigator, Navigate } from 'react-router-dom'
+import { FiArrowLeftCircle, FiMoreVertical } from 'react-icons/fi'
+import { Menu, MenuButton, MenuList, MenuItem, Skeleton } from '@chakra-ui/react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useQuery } from 'react-query'
 
 import EditModal from '../Components/users/EditModal';
 import DeleteModal from '../Components/users/DeleteModal';
+import { url } from '../../../utils/url';
+import { IServerReturnType } from '../../../utils/types/ServerReturnType';
+import { IUser } from '../../../utils/types/IUser'
+import { ITransaction } from '../../../utils/types/Transaction'
+
+const getUser = async (id: string) => {
+    const request = await fetch(`${url}user/${id}`, {
+        method: 'get',
+    });
+    const json = await request.json();
+    if (!request.ok) {
+        throw new Error('An error occured');
+    }
+
+    return json as IServerReturnType;
+}
 
 export default function User() {
     const [openEditModal, setOpenEditModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
+    const [error, setError] = React.useState(false);
+    const [errorText, setErrortext] = React.useState('');
+    const [user, setUser] = React.useState({} as IUser);
+    const [transactions, setTransactions] = React.useState([] as Array<ITransaction>);
+    const [pending, setPending] = React.useState([] as Array<ITransaction>);
 
     const loc = useNavigate();
+    const params = useParams();
+    const icon = `https://avatars.dicebear.com/api/human/${user.email}.svg`;
+    // alert(JSON.stringify(params));
+
+    const getUserDetails = useQuery(['getUser', params['id']], () => getUser(params['id'] as string), {
+        onSuccess: (data) => {
+            const userD = data.data.user;
+            const trans = data.data.transactions as Array<ITransaction>;
+            const pend = trans.filter((item) => item.status === 1);
+            setPending(pend);
+            console.log(data);
+            setUser(userD);
+            setTransactions(trans);
+            setLoading(false);
+            setError(false);
+            setErrortext('');
+        },
+        onError: (error) => {
+            setLoading(false);
+            setError(true);
+            setErrortext('An Error occured');
+        },
+    })
 
     return (
         <div className='w-full h-full flex flex-col'>
@@ -29,12 +75,21 @@ export default function User() {
                 <div className="w-full h-1/3 bg-black rounded-md p-6 flex">
                     
                     <div className="flex-1 flex">
-                        <div className="w-32 h-32 rounded-md bg-gray-600"></div>
+                        <div className="w-32 h-32 rounded-md bg-gray-600">
+                            <img src={icon} alt="" />
+                        </div>
 
                         <div className="flex flex-col justify-center ml-10">
-                            <p className='text-sm font-Inter_Bold text-white'>Johnson Nnamdi</p>
-                            <p className='text-xs font-Inter_Regular text-white mt-3'>jamie@emailapp.com (verified)</p>
-                            <p className='text-xs font-Inter_Regular text-white mt-1'>+234 813 437 5481 (verified)</p>
+                            {
+                                loading && (<Skeleton width="150px" height="100px" />)
+                            }
+                            {!loading && (
+                                <>
+                                    <p className='text-sm font-Inter_Bold text-white'>{user.first_name} {user.last_name}</p>
+                                    <p className='text-xs font-Inter_Regular text-white mt-3'>{user.email} (verified)</p>
+                                    <p className='text-xs font-Inter_Regular text-white mt-1'>{user.phone} (verified)</p>
+                                </>
+                            )}
                         </div>
 
                         <div className="flex flex-col justify-center ml-20">
@@ -64,46 +119,61 @@ export default function User() {
                     <div className="flex">
                         <div className="flex-col flex flex-1">
                             <p className='text-sm font-Inter_Bold text-black'>ACCOUNT STATUS</p>
-                            <p className='text-xs font-Inter_Regular text-black' mt-2>Active</p>
+                            <Skeleton isLoaded={!loading}>
+                                {user.verified ? <p className='text-xs font-Inter_Regular text-black' mt-2>Active</p> : <p className='text-xs font-Inter_Regular text-black' mt-2>Inactive</p>}
+                            </Skeleton>
                         </div>
 
                         <div className="flex-col flex flex-1">
                             <p className='text-sm font-Inter_Bold text-black'>SAVINGS WALLET BALANCE</p>
-                            <p className='text-xs font-Inter_Regular text-black' mt-2>739 USDT</p>
+                            <p className='text-xs font-Inter_Regular text-black' mt-2>0 USDT</p>
                         </div>
 
                         <div className="flex-col flex flex-1">
                             <p className='text-sm font-Inter_Bold text-black'>TOTAL TRANSACTIONS</p>
-                            <p className='text-xs font-Inter_Regular text-black' mt-2>8291</p>
+                            <Skeleton isLoaded={!loading}>
+                                <p className='text-xs font-Inter_Regular text-black' mt-2>{transactions.length}</p>
+                            </Skeleton>
+                            {/* <p className='text-xs font-Inter_Regular text-black' mt-2>8291</p> */}
                         </div>
                     </div>
 
                     <div className="flex mt-10">
                         <div className="flex-col flex flex-1">
                             <p className='text-sm font-Inter_Bold text-black'>USDT WALLET ADDRESS</p>
-                            <p className='text-xs font-Inter_Regular text-black' mt-2>0x83989p28juusuwq29029x0923392</p>
+                            <Skeleton isLoaded={!loading}>
+                                <p className='text-xs font-Inter_Regular text-black' mt-2>{user.usdt_wallet}</p>
+                            </Skeleton>
                         </div>
 
                         <div className="flex-col flex flex-1">
                             <p className='text-sm font-Inter_Bold text-black'>BTC WALLET</p>
-                            <p className='text-xs font-Inter_Regular text-black' mt-2>0x83989P28juuSuWQ29029x0923392</p>
+                            <Skeleton isLoaded={!loading}>
+                                <p className='text-xs font-Inter_Regular text-black' mt-2>{user.bitcoin_wallet}</p>
+                            </Skeleton>
                         </div>
 
                         <div className="flex-col flex flex-1">
                             <p className='text-sm font-Inter_Bold text-black'>ETH WALLET</p>
-                            <p className='text-xs font-Inter_Regular text-black' mt-2>0x83989P28juuSuWQ29029x092 3392</p>
+                            <Skeleton isLoaded={!loading}>
+                                <p className='text-xs font-Inter_Regular text-black' mt-2>{user.ethereum_wallet}</p>
+                            </Skeleton>
                         </div>
                     </div>
 
                     <div className="flex mt-10">
                         <div className="flex-col flex flex-1">
                             <p className='text-sm font-Inter_Bold text-black'>BANK ACCOUNT</p>
-                            <p className='text-xs font-Inter_Regular text-black' mt-2>0237941112, WEMA BANK, Johnson Nnamdi</p>
+                            <Skeleton isLoaded={!loading}>
+                                <p className='text-xs font-Inter_Regular text-black' mt-2>{user.account_number} {user.bank_name} {user.account_name}</p>
+                            </Skeleton>
                         </div>
 
                         <div className="flex-col flex flex-1">
                             <p className='text-sm font-Inter_Bold text-black'>PENDING TRANSACTIONS</p>
-                            <p className='text-xs font-Inter_Regular text-black' mt-2>10</p>
+                            <Skeleton isLoaded={!loading}>
+                                <p className='text-xs font-Inter_Regular text-black' mt-2>{pending.length}</p>
+                            </Skeleton>
                         </div>
 
                         <div className="flex-col flex flex-1">

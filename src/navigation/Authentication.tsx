@@ -5,6 +5,7 @@ import Login from '../Features/auth/Login'
 import ResetPassword from '../Features/auth/ResetPassword'
 import ForgotPassword from '../Features/auth/Forgotpassword'
 import Dashboard from '../Features/dashboard/Pages/Index';
+import Admins from '../Features/dashboard/Pages/Admins'
 
 // components
 import Index from '../Features/dashboard/Pages/Dashboard';
@@ -28,6 +29,7 @@ export default function AuthenticationRoutes() {
                 <Route path="Pending" element={<Pending />}  />
                 <Route path="transactions" element={<Transactions />}  />
                 <Route path="profile" element={<Profile />}  />
+                <Route path="admins" element={<Admins />} />
             </Route>
         </Routes>
     )

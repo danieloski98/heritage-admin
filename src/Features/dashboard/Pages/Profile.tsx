@@ -10,6 +10,7 @@ import {TokenState} from '../../../state/token';
 export default function Profile() {
     const [user, setUser] = useRecoilState(UserState);
     const {setTitle} = useTitle();
+    const icon = `https://avatars.dicebear.com/api/human/${user.email}.svg`;
 
     React.useEffect(() => {
         setTitle('User Profile');
@@ -18,7 +19,7 @@ export default function Profile() {
     return (
         <div className='w-5/6 h-full bg-white p-8 flex flex-col'>
             <div className="flex w-full h-24">
-                <Avatar src="/images/avatar.png" size="xl" />
+                <Avatar src={icon} size="xl" />
                 <div className="flex flex-col h-full justify-center ml-4">
                     <p className='text-md font-Inter_Bold text-black'>{user.fullname}</p>
                     <p className='text-sm text-gray-500 font-Inter_Regular'>{user.email}</p>

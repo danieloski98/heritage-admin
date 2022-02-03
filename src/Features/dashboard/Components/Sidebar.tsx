@@ -4,18 +4,21 @@ import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import { Badge } from '@chakra-ui/react'
 import PaypointModal from './PaypointModal';
+import BankModal from './Bank';
 import {useRecoilState} from 'recoil'
 
 import {PendingState} from '../../../state/pending'
 
 export default function Sidebar() {
     const [showModal, setShowModal] = React.useState(false);
+    const [showBank, setShowBank] = React.useState(false);
     const [pending, setPending] = useRecoilState(PendingState);
     return (
         <div className='flex flex-col w-full h-full'>
 
             {/* modals */}
             <PaypointModal open={showModal} close={setShowModal} />
+            <BankModal open={showBank} close={setShowBank} />
 
             <div className="w-full h-24 flex items-center px-5">
                 <FiAlignLeft color="white" size={30} />
@@ -51,6 +54,11 @@ export default function Sidebar() {
 
                 <p className="text-md font-Inter_Bold text-gray-200 mt-6 mb-8">PAYPOINTS / RATE</p>
                 <p onClick={() => setShowModal(true)} className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Manage Paypoints</p>
+                <p onClick={() => setShowBank(true)} className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Manage Bank Account</p>
+                <p className="text-md font-Inter_Bold text-gray-200 mt-6 mb-8">ADMINS</p>
+                <Link to='/dashboard/admins'>
+                    <p className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Manage Admins</p>
+                </Link>
             </div>
 
             <div className="w-full h-24 flex items-center justify-center cursor-pointer">

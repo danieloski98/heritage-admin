@@ -7,7 +7,7 @@ export interface IPaypoint {
       bank_name: string,
       account_name: string,
       account_number: number,
-      account_type: string
+      bank_code: string
     },
     rate?: number,
     etheruem_wallet?: string,
