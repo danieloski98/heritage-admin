@@ -1,3 +1,3 @@
 const localurl = 'http://localhost:4200/';
 const liveurl = 'https://heritage-server.herokuapp.com/';
-export const url = localurl;
+export const url = liveurl;
