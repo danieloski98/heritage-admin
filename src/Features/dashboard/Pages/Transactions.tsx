@@ -50,7 +50,7 @@ export default function PendingTransactions() {
     const [token, _] = useRecoilState(TokenState);
 
     // query
-    const transactionsQuery = useQuery(['getPending', token], () => getTransactions(token), {
+    const transactionsQuery = useQuery(['gettrans', token], () => getTransactions(token), {
         onSuccess: (data) => {
             const buyT = (data.data as ITransaction[]).filter((item, index) => item.type === 1);
             const sellT = (data.data as ITransaction[]).filter((item, index) => item.type === 2);
