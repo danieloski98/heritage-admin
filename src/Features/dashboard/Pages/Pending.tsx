@@ -34,7 +34,7 @@ const ACTIVE = 'flex-1 border-b-2 border-btnBlue flex items-center justify-cente
 const INACTIVE = 'flex-1  flex items-center justify-center font-Inter_Medium text-sm cursor-pointer text-gray-400';
 
 export default function PendingTransactions() {
-    const [tab, setTab] = React.useState(1);
+    const [tab, setTab] = React.useState(3);
     const [openModal, setOpenModal] = React.useState(false);
     const [buy, setBuy] = React.useState([] as Array<ITransaction>);
     const [sell, setSell] = React.useState([] as Array<ITransaction>);

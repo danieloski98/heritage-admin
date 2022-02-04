@@ -5,6 +5,7 @@ import { useFormik } from 'formik'
 import * as yup from 'yup';
 import { url } from '../../../../utils/url';
 import { useRecoilState } from 'recoil'
+import { queryClient } from '../../../../index'
 
 // state
 import {TokenState} from '../../../../state/token'
@@ -66,6 +67,7 @@ export default function EditModal({ open, close, user}: IProps) {
             });
             return;
         } else {
+            queryClient.invalidateQueries();
             toast({
                 description: json.successMessage,
                 status: 'success',

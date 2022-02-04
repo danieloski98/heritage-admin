@@ -168,7 +168,7 @@ export default function Users() {
                                 </div>
 
                                 <div className="flex-1 max-w-full text-center">
-                                    <p className='font-Inter_Regular text-sm text-gray-700 p-2 rounded-full bg-blue-200'>{item.role === 3 ? 'Super Admin': 'Admin'}</p>
+                                    <p className='font-Inter_Regular text-gray-700 p-2 text-xs rounded-full bg-blue-200'>{item.role === 3 ? 'Super Admin': 'Admin'}</p>
                                 </div>
                                 
                                 <div className="flex w-full justify-center items-center flex-1">

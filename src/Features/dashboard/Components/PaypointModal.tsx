@@ -4,7 +4,7 @@ import {useRecoilState} from 'recoil'
 import { useQuery } from 'react-query';
 import { url } from '../../../utils/url';
 import { IServerReturnType } from '../../../utils/types/ServerReturnType';
-
+import { queryClient } from '../../../index'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
@@ -120,6 +120,7 @@ export default function PaypointModal({ open, close}: IProps) {
             });
             return;
         }
+        queryClient.invalidateQueries();
         toast({
             title: 'Message',
             description: json.successMessage,
