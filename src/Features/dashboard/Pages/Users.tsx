@@ -12,6 +12,7 @@ import useTitle from '../../../hooks/useTitle'
 
 // recoil state
 import {TokenState} from '../../../state/token'
+import {UserState} from '../../../state/details'
 import { IUser } from '../../../utils/types/IUser';
 
 const getUsers = async (token: string) => {
@@ -33,12 +34,13 @@ export default function Users() {
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
     const [filteredUsers, setFilteredUsers] = React.useState([] as Array<IUser>);
-    const [sortBy, setSortBy] = React.useState('');
+    const [sortBy, setSortBy] = React.useState(1);
     const [error, setError] = React.useState(false);
     const [search, setSearch] = React.useState('');
     const [activeUser, setActiveUser] = React.useState({} as IUser);
     const [users, setUsers] = React.useState([] as Array<IUser>)
     const [token, setToken] = useRecoilState(TokenState);
+    const [details, setDetails] = useRecoilState(UserState);
     const {setTitle} = useTitle();
 
 
@@ -79,6 +81,26 @@ export default function Users() {
 
     }
 
+    const compare = React.useCallback(( a: IUser, b: IUser ) => {
+        if (sortBy === 1) {
+            if ((a.first_name as string) < (b.first_name as string)) {
+                return -1;
+            }
+        }
+
+        if (sortBy === 2) {
+            if ((a.email as string) < (b.email as string)) {
+                return -1;
+            }
+        }
+        if (sortBy === 1) {
+            if ((a.createdAt as string) < (b.createdAt as string)) {
+                return -1;
+            }
+        }
+        return 0;
+      }, [sortBy])
+
     return (
         <div className='w-full h-full flex flex-col'>
 
@@ -99,16 +121,16 @@ export default function Users() {
                 </div>
 
                 <div className="w-96  flex items-center">
-                    <p className='font-Inter_Regular text-sm'>Filter</p>
-                    <div className="w-56 mx-4">
-                        <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)} bgColor="white" fontSize="sm" className="font-Inter_Regular">
+                    <p className='font-Inter_Regular text-sm w-24'>Sort By</p>
+                    <div className="w-full mx-4">
+                        <Select value={sortBy} onChange={(e) => setSortBy(parseInt(e.target.value))} bgColor="white" fontSize="sm" className="font-Inter_Regular">
                             {/* <option>Give me options</option> */}
-                            <option value="firstname">Firstname</option>
-                            <option value="email">Email</option>
-                            <option value="date">Date Joined</option>
+                            <option value={1}>Firstname</option>
+                            <option value={2}>Email</option>
+                            <option value={3}>Date Joined</option>
                         </Select>
                     </div>
-                    <button className='w-24 h-10 bg-btnBlue text-white font-Inter_Regular rounded-md'>Apply</button>
+                    {/* <button className='w-24 h-10 bg-btnBlue text-white font-Inter_Regular rounded-md'>Apply</button> */}
                 </div>
 
             </div>
@@ -147,6 +169,7 @@ export default function Users() {
                 }
                 {
                     filteredUsers
+                    .sort(compare)
                     .map((item, index) => (
                         <div key={index.toString()} className="flex mt-0 text-left mb-10 px-10">
                                 <div className="flex-1 w-20 max-w-full">
@@ -165,8 +188,8 @@ export default function Users() {
                                     <p className='font-Inter_Regular text-sm text-gray-700'>{new Date(item.createdAt).toDateString()}</p>
                                 </div>
                                 
-                                <div className="flex w-full justify-center items-center flex-1">
-                                    <FiTrash size={20} color="black" className='mr-5 cursor-pointer' onClick={() => setOpenDeleteModal(true) } />
+                                <div className="flex w-full justify-end items-center flex-1">
+                                    {details.role !== 1 && <FiTrash size={20} color="black" className='mr-5 cursor-pointer' onClick={() => setOpenDeleteModal(true) } />}
                                     <FiEdit size={20} color="black" className='mr-5 cursor-pointer' onClick={() => handleEditModal(item)} />
                                     <Link to={`/dashboard/users/${item._id}`}>
                                         <FiEye size={20} color="black" className='mr-0 cursor-pointer' />

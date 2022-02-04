@@ -8,6 +8,7 @@ import { useQuery } from 'react-query'
 // context
 import {useRecoilState} from 'recoil'
 import {TokenState} from '../../../state/token';
+import {TitleState} from '../../../state/title'
 import { ITransaction } from '../../../utils/types/Transaction';
 import { url } from '../../../utils/url';
 import { IServerReturnType } from '../../../utils/types/ServerReturnType';
@@ -39,11 +40,16 @@ export default function PendingTransactions() {
     const [buy, setBuy] = React.useState([] as Array<ITransaction>);
     const [sell, setSell] = React.useState([] as Array<ITransaction>);
     const [search, setSearch] = React.useState('');
-    const [sort, setSort] = React.useState('');
+    const [sort, setSort] = React.useState(1);
     const [transLoading, setTransloading] = React.useState(true);
     const [transError, setTranserror] = React.useState(false);
     const [activeTrans, setActiveTrans] = React.useState({} as ITransaction);
+    const [title, setTitle] = useRecoilState(TitleState);
     // const [pending, setPending] = useRecoilState(PendingState)
+
+    React.useEffect(() => {
+        setTitle('Pending Transactions')
+    });
 
     // conntext
     const [token, _] = useRecoilState(TokenState);
@@ -81,10 +87,10 @@ export default function PendingTransactions() {
                 </div>
             }
             case 3: {
-                return <PendingBuy transactions={buy} setOpenModal={openTransactionModal} />
+                return <PendingBuy transactions={buy} setOpenModal={openTransactionModal} search={search} sort={sort} />
             }
             case 4: {
-                return <PendingSell transactions={sell} setOpenModal={openTransactionModal} />
+                return <PendingSell transactions={sell} setOpenModal={openTransactionModal} search={search} sort={sort} />
             }
         }
     }
@@ -108,15 +114,17 @@ export default function PendingTransactions() {
                         <InputLeftElement>
                             <FiSearch color="grey" size={20} />
                         </InputLeftElement>
-                        <Input bgColor="white" fontSize="sm" className="font-Inter_Regular" placeholder="Search by email or fullname" />
+                        <Input type="text" name="search" value={search} onChange={(e) => setSearch(e.target.value)} bgColor="white" fontSize="sm" className="font-Inter_Regular" placeholder="Search by ID or firstname" />
                     </InputGroup>
                 </div>
 
                 <div className="w-96  flex items-center">
-                    <p className='font-Inter_Regular text-sm'>Filter</p>
+                    <p className='font-Inter_Regular text-sm w-24'>Sort By</p>
                     <div className="w-full ml-4">
-                        <Select bgColor="white" fontSize="sm" className="font-Inter_Regular">
-                            <option>Firstname</option>
+                    <Select value={sort} onChange={(e) => setSort(parseInt(e.target.value))} bgColor="white" fontSize="sm" className="font-Inter_Regular">
+                            {/* <option>Give me options</option> */}
+                            <option value={1}>Firstname</option>
+                            <option value={2}>ID</option>
                         </Select>
                     </div>
                     {/* <button className='w-24 h-10 bg-btnBlue text-white font-Inter_Regular rounded-md'>Apply</button> */}

@@ -16,20 +16,20 @@ import { IAdmin } from '../../../../utils/types/IAdmin';
 interface IProps {
     open: boolean;
     close: Function;
-    user?: IAdmin;
 }
 
-export default function EditModal({ open, close, user}: IProps) {
+export default function EditModal({ open, close }: IProps) {
     const [loading, setLoading] = React.useState(false);
     const [token, setToken] = useRecoilState(TokenState);
     const toast = useToast();
 
     const formik = useFormik({
         initialValues: {
-            email: user?.email,
-            phone: user?.phone,
-            fullname: user?.fullname,
-            role: user?.role
+            email: '',
+            phone: '',
+            fullname: '',
+            password: '',
+            role: 1
         },
         onSubmit: () => {},
         enableReinitialize: true,
@@ -47,8 +47,8 @@ export default function EditModal({ open, close, user}: IProps) {
             return;
         }
         setLoading(true);
-        const request = await fetch(`${url}admins/${user?._id}`, {
-            method: 'put',
+        const request = await fetch(`${url}admins/create`, {
+            method: 'post',
             headers: {
                 'content-type': 'application/json',
                 authorization: `Bearer ${token}`,
@@ -86,7 +86,7 @@ export default function EditModal({ open, close, user}: IProps) {
             <ModalContent>
                 <ModalCloseButton />
                 <ModalBody className='pt-8'>
-                    <p className='text-xl font-Inter_Bold text-black mt-6'>Edit Admin</p>
+                    <p className='text-xl font-Inter_Bold text-black mt-6'>Create Admin</p>
                     <p className='mt-2 text-sm text-gray-600 font-Inter_Regular'>Only modifiable fields for this user are shown</p>
 
                     <div className="mt-10 flex">
@@ -116,6 +116,21 @@ export default function EditModal({ open, close, user}: IProps) {
                         </div>
                     </div>
 
+                    <div className="mt-4 flex">
+                        <div className="flex-1 flex flex-col pr-4">
+                            <p className="text-sm text-gray-600 font-Inter_Regular">Password</p>
+                            <Input type="password" name="password" value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
+                        </div>
+
+                        <div className="flex-1 flex flex-col">
+                            {/* <p className="text-sm text-gray-600 font-Inter_Regular">Role</p>
+                            <Select name="role" value={formik.values.role} onChange={formik.handleChange} onBlur={formik.handleBlur} bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' >
+                                <option value={1}>Admin</option>
+                                <option value={2}>SuperAdmin</option>
+                            </Select> */}
+                        </div>
+                    </div>
+
                     {/* <div className="mt-4 flex">
                         <div className="flex-1 flex flex-col pr-4">
                             <p className="text-sm text-gray-600 font-Inter_Regular">Email</p>
@@ -132,7 +147,7 @@ export default function EditModal({ open, close, user}: IProps) {
                         <div className="w-40 flex flex-col pr-4">
                             <button onClick={submit} className="w-full h-10 text-white text-sm font-Inter_Regular bg-btnBlue rounded-md">
                                 {loading && <Spinner size="md" color="white" />}
-                                {!loading && <span>Update</span>}
+                                {!loading && <span>Create</span>}
                             </button>
                         </div>
 

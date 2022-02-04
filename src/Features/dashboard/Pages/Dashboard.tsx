@@ -14,7 +14,9 @@ import {
   import {useQuery} from 'react-query';
   import { url } from '../../../utils/url';
   import { IServerReturnType } from '../../../utils/types/ServerReturnType';
-import { currencyFormatterD } from '../../../utils/currencyConverter';
+  import { currencyFormatterD } from '../../../utils/currencyConverter';
+  import {useRecoilState} from 'recoil';
+  import {TitleState} from '../../../state/title'
 
   ChartJS.register(
     CategoryScale,
@@ -80,6 +82,7 @@ const getanalytics = async () => {
 }
 
 export default function Dashboard() {
+  const [_, setTitle] = useRecoilState(TitleState);
   const [ana, setAna] = React.useState({
     users: 1,
     pending: 0,
@@ -93,7 +96,11 @@ export default function Dashboard() {
     onSuccess: (data) => {
       setAna(data.data);
     }
-  })
+  });
+
+  React.useEffect(() => {
+    setTitle('Overview');
+  });
     return (
         <div className='w-full h-full flex flex-col pb-10'>
 
@@ -110,12 +117,12 @@ export default function Dashboard() {
                 </div>
 
                 <div className="flex flex-col p-3 w-56 rounded-md bg-white mb-4">
-                    <p className='text-sm font-Inter_Medium text-gray-600'>TOTAL TRANSACTIONS</p>
+                    <p className='text-sm font-Inter_Medium text-gray-600'>APPROVED TRANSACTIONS</p>
                     <p className='text-2xl text-black mt-3 font-Inter_Extra_Bold'>{ana.transactions}</p>
                 </div>
 
                 <div className="flex flex-col p-3 w-56 rounded-md bg-white mb-4">
-                    <p className='text-sm font-Inter_Medium text-gray-600'>TOTAL SALES</p>
+                    <p className='text-sm font-Inter_Medium text-gray-600'>APPROVED SALES</p>
                     <p className='text-2xl text-black mt-3 font-Inter_Extra_Bold'>${currencyFormatterD(ana.total)}</p>
                 </div>
 

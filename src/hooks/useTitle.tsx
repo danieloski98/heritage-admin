@@ -5,7 +5,7 @@ import { TitleState } from '../state/title'
 
 export default function useTitle() {
     const [title, setT] = useRecoilState(TitleState);
-    const setTitle = (t: 'Admin Dashboard'|'User Management'|'Transaction History'|'Pending Transactions'|'User Profile') => {
+    const setTitle = (t: 'Admin Dashboard'|'User Management'|'Transaction History'|'Pending Transactions'|'User Profile'|'Admin Management') => {
         t.toUpperCase();
         setT(t)
     }

@@ -8,11 +8,14 @@ import BankModal from './Bank';
 import {useRecoilState} from 'recoil'
 
 import {PendingState} from '../../../state/pending'
+import {UserState} from '../../../state/details'
 
 export default function Sidebar() {
     const [showModal, setShowModal] = React.useState(false);
     const [showBank, setShowBank] = React.useState(false);
     const [pending, setPending] = useRecoilState(PendingState);
+    const [user, setUser] = useRecoilState(UserState);
+
     return (
         <div className='flex flex-col w-full h-full'>
 
@@ -52,13 +55,26 @@ export default function Sidebar() {
                     <p className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Transaction History</p>
                 </Link>
 
-                <p className="text-md font-Inter_Bold text-gray-200 mt-6 mb-8">PAYPOINTS / RATE</p>
-                <p onClick={() => setShowModal(true)} className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Manage Paypoints</p>
-                <p onClick={() => setShowBank(true)} className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Manage Bank Account</p>
-                <p className="text-md font-Inter_Bold text-gray-200 mt-6 mb-8">ADMINS</p>
-                <Link to='/dashboard/admins'>
-                    <p className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Manage Admins</p>
-                </Link>
+                {
+                    user.role !== 1 && (
+                        <>
+                            <p className="text-md font-Inter_Bold text-gray-200 mt-6 mb-8">PAYPOINTS / RATE</p>
+                            <p onClick={() => setShowModal(true)} className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Manage Paypoints</p>
+                            <p onClick={() => setShowBank(true)} className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Manage Bank Account</p>
+                        </>
+                    )
+                }
+
+{
+                    user.role !== 1 && (
+                        <>
+                            <p className="text-md font-Inter_Bold text-gray-200 mt-6 mb-8">ADMINS</p>
+                            <Link to='/dashboard/admins'>
+                                <p className='font-Inter_Regular text-sm text-gray-300 ml-6 mb-5 cursor-pointer'>Manage Admins</p>
+                            </Link>
+                        </>
+                    )
+                }
             </div>
 
             <div className="w-full h-24 flex items-center justify-center cursor-pointer">

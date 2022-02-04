@@ -4,7 +4,23 @@ import { IUser } from '../../../utils/types/IUser';
 import { ITransaction } from '../../../utils/types/Transaction';
 import User from '../Pages/User';
 
-export default function PendingBuy({transactions, setOpenModal}: {transactions: Array<ITransaction>, setOpenModal: Function}) {
+export default function PendingBuy({transactions, setOpenModal,  search, sort}: {transactions: Array<ITransaction>, setOpenModal: Function, search: string, sort: number}) {
+
+    const [filteredUsers, setFilteredUsers] = React.useState([] as Array<ITransaction>);
+    React.useEffect(() => {
+        if (search === '') {
+            setFilteredUsers([...transactions]);
+            return;
+        }
+        // eslint-disable-next-line array-callback-return
+        const newArr = transactions.filter((item, index) => {
+            if (item._id?.toLowerCase().includes(search.toLowerCase()) || item.user.first_name?.toLowerCase().includes(search.toLowerCase())) {
+                return item;
+            }
+        });
+        setFilteredUsers([...newArr]);
+    }, [search, transactions])
+
     const coinCheck = (coin: number) => {
         switch(coin) {
             case 1:{
@@ -60,10 +76,26 @@ export default function PendingBuy({transactions, setOpenModal}: {transactions: 
             }
         }
     }
+
+    const compare = React.useCallback(( a: ITransaction, b: ITransaction ) => {
+        if (sort === 1) {
+            if ((a.user.first_name as string) < (b.user.first_name as string)) {
+                return -1;
+            }
+        }
+
+        if (sort === 2) {
+            if ((a._id as string) < (b._id as string)) {
+                return -1;
+            }
+        }
+        return 0;
+      }, [sort]);
+
   return  (
     <div className="flex-1 p-6 flex flex-col overflow-auto">
     {
-        transactions.length < 1 && (
+        filteredUsers.length < 1 && (
             <div className="ww-full h-full flex flex-col items-center justify-center">
                     <img src="/images/nosearch.jpg" className='w-72 h-56' alt="empty"/>
                     No record found
@@ -71,7 +103,9 @@ export default function PendingBuy({transactions, setOpenModal}: {transactions: 
         )
     }
     {
-        transactions.length > 0 && transactions.map((item, index) => (
+        filteredUsers.length > 0 && filteredUsers
+        .sort(compare)
+        .map((item, index) => (
           <div key={index.toString()} className="flex mb-8">
               <div className="flex-1 flex items-center justify-center font-Inter_Medium text-sm text-gray-600">
                   <p className='text-xs text-gray-600 font-Inter_Regular'>{item.user.first_name} {item.user.last_name}</p>

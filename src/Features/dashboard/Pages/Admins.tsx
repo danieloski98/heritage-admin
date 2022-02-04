@@ -2,6 +2,7 @@ import React from 'react'
 import { InputGroup, InputLeftElement, Input, Spinner, Select } from '@chakra-ui/react'
 import { FiSearch, FiEdit, FiTrash, FiEye } from 'react-icons/fi'
 import EditModal from '../Components/admins/EditAdmin';
+import CreateModal from '../Components/admins/AddAdmin';
 import DeleteModal from '../Components/users/DeleteModal';
 import { Link } from 'react-router-dom';
 import { url } from '../../../utils/url';
@@ -12,6 +13,7 @@ import useTitle from '../../../hooks/useTitle'
 
 // recoil state
 import {TokenState} from '../../../state/token'
+import {TitleState} from '../../../state/title'
 import { IUser } from '../../../utils/types/IUser';
 import { IAdmin } from '../../../utils/types/IAdmin';
 
@@ -31,15 +33,17 @@ const getUsers = async (token: string) => {
 
 export default function Users() {
     const [openEditModal, setOpenEditModal] = React.useState(false);
+    const [openCreate, setOpencreate] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
     const [filteredUsers, setFilteredUsers] = React.useState([] as Array<IAdmin>);
-    const [sortBy, setSortBy] = React.useState('');
+    const [sortBy, setSortBy] = React.useState(1);
     const [error, setError] = React.useState(false);
     const [search, setSearch] = React.useState('');
     const [activeUser, setActiveUser] = React.useState({} as IAdmin);
     const [users, setUsers] = React.useState([] as Array<IAdmin>)
     const [token, setToken] = useRecoilState(TokenState);
+    // const [title, setTitle] = useRecoilState(TitleState);
     const {setTitle} = useTitle();
 
 
@@ -56,7 +60,7 @@ export default function Users() {
     });
 
     React.useEffect(() => {
-        setTitle('User Management');
+        setTitle('Admin Management');
     });
 
     React.useEffect(() => {
@@ -80,12 +84,33 @@ export default function Users() {
 
     }
 
+    const compare = React.useCallback(( a: IAdmin, b: IAdmin ) => {
+        if (sortBy === 1) {
+            if ((a.fullname as string) < (b.fullname as string)) {
+                return -1;
+            }
+        }
+
+        if (sortBy === 2) {
+            if ((a.email as string) < (b.email as string)) {
+                return -1;
+            }
+        }
+        if (sortBy === 1) {
+            if ((a.createdAt as string) < (b.createdAt as string)) {
+                return -1;
+            }
+        }
+        return 0;
+      }, [sortBy])
+
     return (
         <div className='w-full h-full flex flex-col'>
 
             {/* modals */}
 
             <EditModal user={activeUser} open={openEditModal} close={setOpenEditModal} />
+            <CreateModal open={openCreate} close={setOpencreate} />
             <DeleteModal open={openDeleteModal} close={setOpenDeleteModal} />
 
             <div className="flex h-12 items-center">
@@ -102,14 +127,14 @@ export default function Users() {
                 <div className="w-96  flex items-center">
                     <p className='font-Inter_Regular text-sm'>Filter</p>
                     <div className="w-56 mx-4">
-                        <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)} bgColor="white" fontSize="sm" className="font-Inter_Regular">
+                        <Select value={sortBy} onChange={(e) => setSortBy(parseInt(e.target.value))} bgColor="white" fontSize="sm" className="font-Inter_Regular">
                             {/* <option>Give me options</option> */}
-                            <option value="firstname">Firstname</option>
-                            <option value="email">Email</option>
-                            <option value="date">Date Joined</option>
+                            <option value={1}>Fullname</option>
+                            <option value={2}>Email</option>
+                            <option value={3}>Date Joined</option>
                         </Select>
                     </div>
-                    <button className='w-24 h-10 bg-btnBlue text-white font-Inter_Regular rounded-md'>Apply</button>
+                    <button onClick={() => setOpencreate(true)} className='w-32 h-10 text-xs bg-btnBlue text-white font-Inter_Regular rounded-md'>create admin</button>
                 </div>
 
             </div>
@@ -149,6 +174,7 @@ export default function Users() {
                 }
                 {
                     filteredUsers
+                    .sort(compare)
                     .map((item, index) => (
                         <div key={index.toString()} className="flex items-center mt-0 text-left mb-10 px-10">
                                 {/* <div className="flex-1 w-20 max-w-full">
