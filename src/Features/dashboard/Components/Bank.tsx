@@ -131,13 +131,14 @@ export default function PaypointModal({ open, close}: IProps) {
             return;
         }
         setLoading(true);
+        const code = banks.filter((item) => item.code === formik.values.bank_name);
         const request = await fetch(`${url}paypoint?bank=1`, {
             method: 'put',
             headers: {
                 'content-type': 'application/json',
                 authorization: `Bearer ${token}`
             },
-            body: JSON.stringify(formik.values),
+            body: JSON.stringify({...formik.values, bank_name: code[0].name, bank_code: formik.values.bank_name }),
         });
         const json = await request.json() as IServerReturnType;
         setLoading(false);
