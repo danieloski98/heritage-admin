@@ -27,6 +27,8 @@ export interface ITransaction {
 
   admin_proof_of_payment: string;
 
+  USD: string;
+
   type: number;
 
   coin_type: COINTYPE;

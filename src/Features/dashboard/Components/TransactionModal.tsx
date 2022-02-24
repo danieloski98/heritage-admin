@@ -187,7 +187,7 @@ export default function TransactionModal({ open, close, transaction}: IProps) {
                     <div className="mt-6 flex justify-between">
                         <div className="flex-1 flex flex-col">
                             <p className="text-xs text-gray-600 font-Inter_Regular">Amount</p>
-                            {transaction.amount !== null && transaction.amount !== undefined  && <p className='text-sm font-Inter_Bold text-black'>${currencyFormatterD(transaction.amount)}</p>}
+                            {transaction.amount !== null && transaction.amount !== undefined  && <p className='text-sm font-Inter_Bold text-black'>NGN{currencyFormatterD(transaction.amount)} (${currencyFormatterD(parseInt(transaction.USD))})</p>}
                         </div>
                         <div className="flex-1 flex flex-col">
                             {/* <p className="text-xs text-gray-600 font-Inter_Regular">Requested Withdrawal To</p>

@@ -122,8 +122,9 @@ export default function PendingSell({transactions, setOpenModal, search, sort}: 
                   <p className='text-xs text-gray-600 font-Inter_Regular'>{coinCheck(item.coin_type)} ({walletCheck(item.coin_type, item.user)})</p>
               </div>
   
-              <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600">
-                  <p className='text-xs text-gray-600 font-Inter_Regular'>${currencyFormatterD(item.amount)}</p>
+              <div className="flex-1  flex flex-col items-center justify-center font-Inter_Medium text-sm text-gray-600">
+                    <p className='text-xs text-gray-600 font-Inter_Regular'>NGN{currencyFormatterD(item.amount)}</p>
+                  <p className='text-xs text-gray-600 font-Inter_Regular'>${currencyFormatterD(parseInt(item.USD))}</p>
               </div>
   
               <div className="flex-1  flex flex-col items-center justify-center font-Inter_Medium text-smtext-gray-600">

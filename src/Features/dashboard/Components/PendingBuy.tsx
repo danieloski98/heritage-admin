@@ -123,8 +123,9 @@ export default function PendingBuy({transactions, setOpenModal,  search, sort}: 
                   <p className='text-xs text-gray-600 font-Inter_Regular'>{item.user.bank_name}-{item.user.account_number}</p>
               </div>
   
-              <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600">
-                  <p className='text-xs text-gray-600 font-Inter_Regular'>${currencyFormatterD(item.amount)}</p>
+              <div className="flex-1  flex flex-col items-center justify-center font-Inter_Medium text-sm text-gray-600">
+                  <p className='text-xs text-gray-600 font-Inter_Regular'>NGN{currencyFormatterD(item.amount)}</p>
+                  <p className='text-xs text-gray-600 font-Inter_Regular'>${currencyFormatterD(parseInt(item.USD))}</p>
               </div>
   
               <div className="flex-1  flex flex-col items-center justify-center font-Inter_Medium text-smtext-gray-600">

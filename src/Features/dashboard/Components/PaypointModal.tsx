@@ -27,7 +27,8 @@ const validationSchema = yup.object({
     btc: yup.string().required('Bitcoin wallet address is required'),
     eth: yup.string().required(),
     usdt: yup.string().required(),
-    rate: yup.number().required(),
+    buy_rate: yup.number().required(),
+    sell_rate: yup.number().required(),
 });
 
 interface IProps {
@@ -67,7 +68,8 @@ export default function PaypointModal({ open, close}: IProps) {
             btc: paypoint.bitcoin_wallet,
             eth: paypoint.etheruem_wallet,
             usdt: paypoint.usdt_wallet,
-            rate: paypoint.rate,
+            buy_rate: paypoint.buy_rate,
+            sell_rate: paypoint.sell_rate,
         },
         validationSchema,
         onSubmit: () => {},
@@ -178,16 +180,32 @@ export default function PaypointModal({ open, close}: IProps) {
 
                     <div className="mt-4 flex">
                         <div className="flex-1 flex flex-col">
-                            <p className="text-sm text-gray-600 font-Inter_Regular">Exchange Rate (In Naira)</p>
+                            <p className="text-sm text-gray-600 font-Inter_Regular">Buying Rate (In Naira)</p>
                             <InputGroup>
                                 <InputLeftElement>
                                     <span className="text-Inter_Medium mt-0 text-sm">N</span>
                                 </InputLeftElement>
-                                <Input type="number" name="rate" value={formik.values.rate} onChange={formik.handleChange} onBlur={formik.handleBlur} 
-                            onFocus={() => formik.setFieldTouched('rate', true, true)}  bgColor="#327A7C15" fontSize="xs" className='mt-0 font-Inter_Regular' />
+                                <Input type="number" name="buy_rate" value={formik.values.buy_rate as any} onChange={formik.handleChange} onBlur={formik.handleBlur} 
+                            onFocus={() => formik.setFieldTouched('buy_rate', true, true)}  bgColor="#327A7C15" fontSize="xs" className='mt-0 font-Inter_Regular' />
                             </InputGroup>
-                            {formik.touched.rate && formik.errors.rate && (
-                                <p className='mt-2 text-red-400 font-Inter_Regular text-sm'>{formik.errors.rate}</p>
+                            {formik.touched.buy_rate && formik.errors.buy_rate && (
+                                <p className='mt-2 text-red-400 font-Inter_Regular text-sm'>{formik.errors.buy_rate}</p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="mt-4 flex">
+                        <div className="flex-1 flex flex-col">
+                            <p className="text-sm text-gray-600 font-Inter_Regular">Selling Rate (In Naira)</p>
+                            <InputGroup>
+                                <InputLeftElement>
+                                    <span className="text-Inter_Medium mt-0 text-sm">N</span>
+                                </InputLeftElement>
+                                <Input type="number" name="sell_rate" value={formik.values.sell_rate as any} onChange={formik.handleChange} onBlur={formik.handleBlur} 
+                            onFocus={() => formik.setFieldTouched('sell_rate', true, true)}  bgColor="#327A7C15" fontSize="xs" className='mt-0 font-Inter_Regular' />
+                            </InputGroup>
+                            {formik.touched.sell_rate && formik.errors.sell_rate && (
+                                <p className='mt-2 text-red-400 font-Inter_Regular text-sm'>{formik.errors.sell_rate}</p>
                             )}
                         </div>
                     </div>
