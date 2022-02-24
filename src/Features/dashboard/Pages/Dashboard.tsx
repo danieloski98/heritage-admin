@@ -14,7 +14,7 @@ import {
   import {useQuery} from 'react-query';
   import { url } from '../../../utils/url';
   import { IServerReturnType } from '../../../utils/types/ServerReturnType';
-  import { currencyFormatterD } from '../../../utils/currencyConverter';
+  import { currencyFormatterD, currencyFormatterNGN } from '../../../utils/currencyConverter';
   import {useRecoilState} from 'recoil';
   import {TitleState} from '../../../state/title'
 
@@ -118,27 +118,27 @@ export default function Dashboard() {
 
                 <div className="flex flex-col p-3 w-56 rounded-md bg-white mb-4">
                     <p className='text-sm font-Inter_Medium text-gray-600'>APPROVED TRANSACTIONS</p>
-                    <p className='text-2xl text-black mt-3 font-Inter_Extra_Bold'>{ana.transactions}</p>
+                    <p className='text-xl text-black mt-3 font-Inter_Extra_Bold'>{ana.transactions}</p>
                 </div>
 
                 <div className="flex flex-col p-3 w-56 rounded-md bg-white mb-4">
                     <p className='text-sm font-Inter_Medium text-gray-600'>APPROVED SALES</p>
-                    <p className='text-2xl text-black mt-3 font-Inter_Extra_Bold'>${currencyFormatterD(ana.total)}</p>
+                    <p className='text-xl text-black mt-3 font-Inter_Extra_Bold'>NGN {currencyFormatterNGN(ana.total)}</p>
                 </div>
 
                 <div className="flex flex-col p-3 w-56 rounded-md bg-white mb-4">
                     <p className='text-sm font-Inter_Medium text-gray-600'>TOTAL BITCOIN SOLD</p>
-                    <p className='text-2xl text-black mt-3 font-Inter_Extra_Bold'>${currencyFormatterD(ana.btc_amount)}</p>
+                    <p className='text-xl text-black mt-3 font-Inter_Extra_Bold'>NGN {currencyFormatterNGN(ana.btc_amount)}</p>
                 </div>
 
                 <div className="flex flex-col p-3 w-56 rounded-md bg-white mb-4">
                     <p className='text-sm font-Inter_Medium text-gray-600'>TOTAL ETHERUEM SOLD</p>
-                    <p className='text-2xl text-black mt-3 font-Inter_Extra_Bold'>${currencyFormatterD(ana.eth_amount)}</p>
+                    <p className='text-xl text-black mt-3 font-Inter_Extra_Bold'>NGN {currencyFormatterNGN(ana.eth_amount)}</p>
                 </div>
 
                 <div className="flex flex-col p-3 w-56 rounded-md bg-white mb-4">
                     <p className='text-sm font-Inter_Medium text-gray-600'>TOTAL USDT SOLD</p>
-                    <p className='text-2xl text-black mt-3 font-Inter_Extra_Bold'>${currencyFormatterD(ana.usdt_amount)}</p>
+                    <p className='text-xl text-black mt-3 font-Inter_Extra_Bold'>NGN {currencyFormatterNGN(ana.usdt_amount)}</p>
                 </div>
 
             </div>
