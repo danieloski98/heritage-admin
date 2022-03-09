@@ -195,6 +195,16 @@ export default function TransactionModal({ open, close, transaction}: IProps) {
                         </div>
                     </div>
 
+                    <div className='mt-5 flex flex-wrap'>
+                    {
+                        transaction.proof_of_payment !== undefined && transaction.proof_of_payment.length > 0 && transaction.proof_of_payment.map((item, index) => (
+                           <a href={item} target="_blank" rel="noreferrer">
+                                <img src={item} alt="img" className="w-24 h-24 mb-5 rounded-md mr-10 cursor-pointer object-fill" />
+                           </a>
+                        ))
+                    }
+                    </div>
+
                    
                             <p onClick={() => close(false)} className="text-center underline text-btnBlue text-xs font-Inter_Regular cursor-pointer mt-5">View In Block Explorer</p>
 
@@ -205,6 +215,8 @@ export default function TransactionModal({ open, close, transaction}: IProps) {
                             </div>
                         )
                     }
+
+
 
                     {
                         location.pathname !== '/dashboard/transactions' && (
