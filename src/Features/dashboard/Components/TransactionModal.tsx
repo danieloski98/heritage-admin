@@ -116,7 +116,7 @@ export default function TransactionModal({ open, close, transaction}: IProps) {
     }
     
     return (
-        <Modal isOpen={open} onClose={() => close(false)} isCentered closeOnEsc closeOnOverlayClick={false} size="md">
+        <Modal isOpen={open} onClose={() => close(false)} isCentered closeOnEsc closeOnOverlayClick={false} size="2xl">
             <ModalOverlay />
             <ModalContent>
                 <ModalCloseButton />
@@ -199,7 +199,7 @@ export default function TransactionModal({ open, close, transaction}: IProps) {
                     {
                         transaction.proof_of_payment !== undefined && transaction.proof_of_payment.length > 0 && transaction.proof_of_payment.map((item, index) => (
                            <a href={item} target="_blank" rel="noreferrer">
-                                <img src={item} alt="img" className="w-24 h-24 mb-5 rounded-md mr-10 cursor-pointer object-fill" />
+                                <img src={item} alt="img" className="w-24 h-24 mb-5 rounded-md mr-3 cursor-pointer object-fill" />
                            </a>
                         ))
                     }
