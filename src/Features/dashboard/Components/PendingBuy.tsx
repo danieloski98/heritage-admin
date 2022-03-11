@@ -111,16 +111,16 @@ export default function PendingBuy({transactions, setOpenModal,  search, sort}: 
                   <p className='text-xs text-gray-600 font-Inter_Regular'>{item.user.first_name} {item.user.last_name}</p>
               </div>
   
-              <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600">
+              <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600  overflow-hidden text-ellipsis">
                   <p className='text-xs text-gray-600 font-Inter_Regular'>#{item._id}</p>
               </div>
 
-              <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600">
-                  <p className='text-xs text-gray-600 font-Inter_Regular'>{coinCheck(item.coin_type)} ({walletCheck(item.coin_type, item.user)})</p>
+              <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600  overflow-hidden text-ellipsis mx-5">
+                  <p className='text-xs text-gray-600 font-Inter_Regular text-center'>{coinCheck(item.coin_type)} <br /> ({walletCheck(item.coin_type, item.user)})</p>
               </div>
   
-              <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600">
-                  <p className='text-xs text-gray-600 font-Inter_Regular'>{item.user.bank_name}-{item.user.account_number}</p>
+              <div className="flex-1  flex items-center justify-center font-Inter_Medium text-sm text-gray-600 text-center ">
+                  <p className='text-xs text-gray-600 font-Inter_Regular'>{item.user.bank_name}-{item.user.account_number} <br /> <b>{item.user.account_name}</b></p>
               </div>
   
               <div className="flex-1  flex flex-col items-center justify-center font-Inter_Medium text-sm text-gray-600">

@@ -139,16 +139,16 @@ export default function TransactionModal({ open, close, transaction}: IProps) {
                     <div className="mt-6 flex justify-between">
                         {
                             transaction?.type === 1 && (
-                                <div className="flex-1 flex flex-col">
+                                <div className="flex-1 flex flex-col mr-5">
                                     <p className="text-xs text-gray-600 font-Inter_Regular">Requested ({coinCheck(transaction?.coin_type)}) From</p>
-                                    <p className='text-sm font-Inter_Bold text-black'>{transaction?.user.account_name} ({transaction?.user.account_number})</p>
+                                    <p className='text-sm font-Inter_Bold text-black'>{transaction?.user.account_name} <br /> {transaction?.user.bank_name} ({transaction?.user.account_number})</p>
                                 </div>
                             )
                         }
 
                         {
                             transaction?.type === 2 && (
-                                <div className="flex-1 flex flex-col">
+                                <div className="flex-1 flex flex-col mr-5">
                                     <p className="text-xs text-gray-600 font-Inter_Regular">Sold ({coinCheck(transaction.coin_type)}) From</p>
                                     <p className='text-sm font-Inter_Bold text-black'>{coinCheck(transaction.coin_type)} WALLET ({walletCheck(transaction.coin_type, transaction.user)})</p>
                                 </div>
@@ -157,10 +157,10 @@ export default function TransactionModal({ open, close, transaction}: IProps) {
 
 {
                             transaction.type === 1 && (
-                                <div className="flex-1 flex flex-col">
-                                <p className="text-xs text-gray-600 font-Inter_Regular">Requested Withdrawal To</p>
-                                <p className='text-sm font-Inter_Bold text-black'>{coinCheck(transaction.coin_type)} WALLET ({walletCheck(transaction.coin_type, transaction.user)})</p>
-                            </div>
+                                <div className="flex-1 flex flex-col mr-5">
+                                    <p className="text-xs text-gray-600 font-Inter_Regular">Requested Withdrawal To</p>
+                                    <p className='text-sm font-Inter_Bold text-black'>{coinCheck(transaction.coin_type)} WALLET ({walletCheck(transaction.coin_type, transaction.user)})</p>
+                                </div>
                             )
                         }
 
@@ -168,7 +168,7 @@ export default function TransactionModal({ open, close, transaction}: IProps) {
                             transaction.type === 2 && (
                                 <div className="flex-1 flex flex-col">
                                     <p className="text-xs text-gray-600 font-Inter_Regular">Requested Withdrawal To</p>
-                                    <p className='text-sm font-Inter_Bold text-black'>{transaction?.user.account_name} - ({transaction?.user.account_number})</p>
+                                    <p className='text-sm font-Inter_Bold text-black'>{transaction?.user.account_name} <br /> {transaction?.user.bank_name} ({transaction?.user.account_number})</p>
                                 </div>
                             )
                         }
