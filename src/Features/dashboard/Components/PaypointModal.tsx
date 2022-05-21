@@ -24,9 +24,9 @@ const getPaypoint = async () => {
 }
 
 const validationSchema = yup.object({
-    btc: yup.string().required('Bitcoin wallet address is required'),
-    eth: yup.string().required(),
-    usdt: yup.string().required(),
+    bitcoin_wallet: yup.string().required('Bitcoin wallet address is required'),
+    etheruem_wallet: yup.string().required(),
+    usdt_wallet: yup.string().required(),
     buy_rate: yup.number().required(),
     sell_rate: yup.number().required(),
 });
@@ -65,9 +65,9 @@ export default function PaypointModal({ open, close}: IProps) {
 
     const formik = useFormik({
         initialValues: {
-            btc: paypoint.bitcoin_wallet,
-            eth: paypoint.etheruem_wallet,
-            usdt: paypoint.usdt_wallet,
+            bitcoin_wallet: paypoint.bitcoin_wallet,
+            etheruem_wallet: paypoint.etheruem_wallet,
+            usdt_wallet: paypoint.usdt_wallet,
             buy_rate: paypoint.buy_rate,
             sell_rate: paypoint.sell_rate,
         },
@@ -144,10 +144,10 @@ export default function PaypointModal({ open, close}: IProps) {
                     <div className="mt-6 flex">
                         <div className="flex-1 flex flex-col">
                             <p className="text-sm text-gray-600 font-Inter_Regular">Admin Bitcoin Wallet</p>
-                            <Input name="btc" value={formik.values.btc} onChange={formik.handleChange} onBlur={formik.handleBlur} 
-                            onFocus={() => formik.setFieldTouched('btc', true, true)} bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
-                            {formik.touched.btc && formik.errors.btc && (
-                                <p className='mt-2 text-red-400 font-Inter_Regular text-sm'>{formik.errors.btc}</p>
+                            <Input name="bitcoin_wallet" value={formik.values.bitcoin_wallet} onChange={formik.handleChange} onBlur={formik.handleBlur} 
+                            onFocus={() => formik.setFieldTouched('bitcoin_wallet', true, true)} bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
+                            {formik.touched.bitcoin_wallet && formik.errors.bitcoin_wallet && (
+                                <p className='mt-2 text-red-400 font-Inter_Regular text-sm'>{formik.errors.bitcoin_wallet}</p>
                             )}
                         </div>
                     </div>
@@ -155,10 +155,10 @@ export default function PaypointModal({ open, close}: IProps) {
                     <div className="mt-4 flex">
                         <div className="flex-1 flex flex-col">
                             <p className="text-sm text-gray-600 font-Inter_Regular">Admin Ethereum Wallet</p>
-                            <Input name="eth" value={formik.values.eth} onChange={formik.handleChange} onBlur={formik.handleBlur} 
-                            onFocus={() => formik.setFieldTouched('eth', true, true)}  bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
-                            {formik.touched.eth && formik.errors.eth && (
-                                <p className='mt-2 text-red-400 font-Inter_Regular text-sm'>{formik.errors.eth}</p>
+                            <Input name="etheruem_wallet" value={formik.values.etheruem_wallet} onChange={formik.handleChange} onBlur={formik.handleBlur} 
+                            onFocus={() => formik.setFieldTouched('etheruem_wallet', true, true)}  bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
+                            {formik.touched.etheruem_wallet && formik.errors.etheruem_wallet && (
+                                <p className='mt-2 text-red-400 font-Inter_Regular text-sm'>{formik.errors.etheruem_wallet}</p>
                             )}
                         </div>
                     </div>
@@ -166,10 +166,10 @@ export default function PaypointModal({ open, close}: IProps) {
                     <div className="mt-4 flex">
                         <div className="flex-1 flex flex-col">
                             <p className="text-sm text-gray-600 font-Inter_Regular">Admin Tether (Usdt -Erc20)Wallet</p>
-                            <Input name="usdt" value={formik.values.usdt} onChange={formik.handleChange} onBlur={formik.handleBlur} 
-                            onFocus={() => formik.setFieldTouched('usdt', true, true)}  bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
-                            {formik.touched.usdt && formik.errors.usdt && (
-                                <p className='mt-2 text-red-400 font-Inter_Regular text-sm'>{formik.errors.usdt}</p>
+                            <Input name="usdt_wallet" value={formik.values.usdt_wallet} onChange={formik.handleChange} onBlur={formik.handleBlur} 
+                            onFocus={() => formik.setFieldTouched('usdt_wallet', true, true)}  bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular' />
+                            {formik.touched.usdt_wallet && formik.errors.usdt_wallet && (
+                                <p className='mt-2 text-red-400 font-Inter_Regular text-sm'>{formik.errors.usdt_wallet}</p>
                             )}
                         </div>
                     </div>

@@ -99,7 +99,7 @@ export default function PaypointModal({ open, close}: IProps) {
             bank_name: paypoint.bank?.bank_name,
             account_number: paypoint.bank?.account_number,
             account_name: paypoint.bank?.account_name,
-         
+            bank_code: paypoint.bank?.bank_code,
         },
         validationSchema,
         onSubmit: () => {},
@@ -138,7 +138,7 @@ export default function PaypointModal({ open, close}: IProps) {
                 'content-type': 'application/json',
                 authorization: `Bearer ${token}`
             },
-            body: JSON.stringify({...formik.values, bank_name: code[0].name, bank_code: formik.values.bank_name }),
+            body: JSON.stringify({ bank: {  bank_name: formik.values.bank_name, account_number: formik.values.account_number, account_name: formik.values.account_name, bank_code: banks.filter((item) => item.name === formik.values.bank_name)[0].code } }),
         });
         const json = await request.json() as IServerReturnType;
         setLoading(false);
@@ -201,7 +201,7 @@ export default function PaypointModal({ open, close}: IProps) {
                             onFocus={() => formik.setFieldTouched('bank_name', true, true)}  bgColor="#327A7C15" fontSize="xs" className='mt-2 font-Inter_Regular'> 
                             {
                                 banks.map((item, index) => (
-                                    <option key={index.toString()} value={item.code}>{item.name}</option>
+                                    <option key={index.toString()} value={item.name}>{item.name}</option>
                                 ))
                             }
                             </Select>
