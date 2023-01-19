@@ -1,3 +1,3 @@
 const localurl = 'http://localhost:4200/';
-const liveurl = 'https://heritage-server.herokuapp.com/';
+const liveurl = 'https://api.heritagexchange.com/';
 export const url = liveurl;
